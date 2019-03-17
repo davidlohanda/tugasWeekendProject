@@ -249,7 +249,7 @@ class CustomPaginationActionsTable extends React.Component {
         </div>
       </Paper>
       <Paper>
-          <h3>Total : Rp.{this.totalCart()} </h3>
+          <h3>Total : Rp. </h3>
 
 
       </Paper>
