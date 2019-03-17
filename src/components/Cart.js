@@ -159,6 +159,14 @@ class CustomPaginationActionsTable extends React.Component {
     .catch((err)=>console.log(err))
   }
 
+    renderTotalPrice=()=>{
+        var totalPrice=0
+        this.state.rows.map((val)=>{
+            totalPrice+=val.subtotal
+        })
+        return totalPrice
+    }
+
   renderJsx = () => {
     var jsx =  this.state.rows.slice(this.state.page * this.state.rowsPerPage,  this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
     .map((val) => {
@@ -248,10 +256,10 @@ class CustomPaginationActionsTable extends React.Component {
           </Table>
         </div>
       </Paper>
-      <Paper>
-          <h3>Total : Rp. </h3>
-
-
+      <Paper className='mt-3'>
+          <h2>Order</h2>
+          <h3>Total : Rp.{this.renderTotalPrice()} </h3>
+          <button>Checkout</button>
       </Paper>
       
       </div>

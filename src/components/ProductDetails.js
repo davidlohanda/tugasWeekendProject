@@ -27,19 +27,17 @@ class ProductDetail extends React.Component{
 
     btnAddtoCart=(id)=>{
         var qty=parseInt(this.refs.inputQty.value)
-        if(qty===null){
-            this.refs.inputQty.value=1
-        }
+        
         
         Axios.get('http://localhost:2000/products/'+id)
         .then((res)=>{
             console.log(res.data)
-            var newItem={...res.data, quantity:qty, username:this.props.username, userId:this.props.userId}
+            var newItem={...res.data, quantity:qty, subtotal:qty*((1-res.data.discount/100)*res.data.harga) , username:this.props.username, userId:this.props.userId}
   
             Axios.get('http://localhost:2000/cart?userId='+this.props.userId+'&id='+id)
             .then((res)=>{
                 if(res.data.length>0){
-                    var updateItem={...newItem, quantity: res.data[0].quantity+qty}
+                    var updateItem={...newItem, quantity: res.data[0].quantity+qty , subtotal:(res.data[0].quantity+qty)*((1-res.data[0].discount/100)*res.data[0].harga) }
                     Axios.put('http://localhost:2000/cart/'+id, updateItem)
                     .then((res)=>{
                       console.log(res)
