@@ -16,9 +16,11 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Axios from 'axios';
 import { connect } from 'react-redux'
+import swal from 'sweetalert'
 
 
 
+const urlApi='http://localhost:2000'
 
 const actionsStyles = theme => ({
   root: {
@@ -203,6 +205,38 @@ class CustomPaginationActionsTable extends React.Component {
 }
 
 
+btnCheckOut=()=>{
+  Axios.get(urlApi+'/cart?userId='+this.props.id)
+  .then((res)=>{
+    if (res.data.length>0){
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+      today = dd + '/' + mm + '/' + yyyy;
+      
+      var cart = this.state.rows
+ 
+          Axios.post(urlApi+"/history/",{...cart,tanggal:today})
+          .then((res)=>{
+            swal("Thank you","Please Come Again","success")
+          })
+          .catch((err)=>console.log(err))
+
+          Axios.delete(urlApi+"/cart/")
+          .then((res)=>{console.log(res)
+            this.getDataCart()
+          })
+          .catch((err)=>console.log(err))
+          
+    }else{
+      swal("Item Kosong","Blank","error")
+    }
+  })
+  .catch((err)=>console.log(err))
+}
+
+
 
   render() {
     const { classes } = this.props;
@@ -259,7 +293,7 @@ class CustomPaginationActionsTable extends React.Component {
       <Paper className='mt-3'>
           <h2>Order</h2>
           <h3>Total : Rp.{this.renderTotalPrice()} </h3>
-          <button>Checkout</button>
+          <button onClick={this.btnCheckOut}>Checkout</button>
       </Paper>
       
       </div>

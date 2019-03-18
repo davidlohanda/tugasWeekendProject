@@ -4,10 +4,12 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import cookie from 'universal-cookie'
 import {resetUser} from '../1.actions'
+import axios from 'axios'
 
 const Cookie=new cookie()
 
 class Header extends React.Component{
+    state={cart:[]}
     constructor(props) {
         super(props);
     
@@ -25,6 +27,23 @@ class Header extends React.Component{
     onBtnLogout=()=>{
         Cookie.remove('userData')
         this.props.resetUser()
+    }
+
+    componentDidUpdate(){
+        this.renderCartLength()
+    }
+
+
+    renderCartLength=()=>{
+        axios.get('http://localhost:2000/cart')
+        .then((res)=>{
+            var cartLength=0
+            res.data.map((val)=>{
+                cartLength+=val.quantity
+            })
+            this.setState({cartLength:cartLength})
+        })
+        .catch((err)=>console.log(err))
     }
     
     render(){
@@ -48,7 +67,7 @@ class Header extends React.Component{
                             <NavLink>Hi , {this.props.username}</NavLink>
                         </NavItem>
                         <NavItem>
-                            <Link to="/cart"><NavLink className="btn btn-default border-primary" style={{fontSize:"14px"}}><i class="fas fa-shopping-cart"></i> Cart </NavLink></Link>
+                            <Link to="/cart"><NavLink className="btn btn-default border-primary" style={{fontSize:"14px"}}><i class="fas fa-shopping-cart"></i> Cart {this.state.cartLength} </NavLink></Link>
                         </NavItem>
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>
@@ -118,7 +137,7 @@ class Header extends React.Component{
 const mapStateToProps=(state)=>{
     return{
         username:state.user.username,
-        role:state.user.role
+        role:state.user.role,
     }
 }
 

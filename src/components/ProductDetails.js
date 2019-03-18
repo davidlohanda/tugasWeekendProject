@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { connect } from 'react-redux'
 import swal from 'sweetalert'
 
+
 class ProductDetail extends React.Component{
     state = {product : {}}
     
@@ -27,7 +28,6 @@ class ProductDetail extends React.Component{
 
     btnAddtoCart=(id)=>{
         var qty=parseInt(this.refs.inputQty.value)
-        
         
         Axios.get('http://localhost:2000/products/'+id)
         .then((res)=>{
