@@ -33,7 +33,7 @@ class Header extends React.Component{
         this.renderCartLength()
     }
 
-
+    
     renderCartLength=()=>{
         axios.get('http://localhost:2000/cart')
         .then((res)=>{
@@ -86,9 +86,11 @@ class Header extends React.Component{
                                 null
                             }
                             
-                            <DropdownItem>
-                                Histori Transaksi
-                            </DropdownItem>
+                            <Link to='/history'>
+                                <DropdownItem>
+                                    Histori Transaksi
+                                </DropdownItem>
+                            </Link>
                             <DropdownItem>
                                 Edit Profile
                             </DropdownItem>

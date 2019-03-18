@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import {Route,withRouter} from 'react-router-dom'
+import {Route,withRouter,Switch} from 'react-router-dom'
 import cookie from 'universal-cookie'
 
 import Header from './components/Header'
@@ -13,6 +13,10 @@ import ProductList from './components/ProductList'
 import ProductDetails from './components/ProductDetails'
 import ManageProducts from './components/admin/ManageProducts';
 import Cart from './components/Cart'
+import PageNotFound from './components/PageNotFound'
+import ScrollToTop from './components/scrollToTop'
+import HistoryTransaksi from './components/HistoryTransaksi'
+
 
 const Cookie=new cookie()
 
@@ -29,13 +33,19 @@ class App extends Component {
     return (
       <div>
         <Header/>
-        <Route path='/' exact component={Home}/>
-        <Route path='/login' exact component={Login}/>
-        <Route path='/register' exact component={Register}/>
-        <Route path='/products' exact component={ProductList}/>
-        <Route path='/product-detail/:id' exact component={ProductDetails}/>
-        <Route path='/manage' exact component={ManageProducts}/>
-        <Route path='/cart' exact component={Cart}/>
+        <ScrollToTop>
+          <Switch>
+            <Route path='/' exact component={Home}/>
+            <Route path='/login' exact component={Login}/>
+            <Route path='/register' exact component={Register}/>
+            <Route path='/products' exact component={ProductList}/>
+            <Route path='/product-detail/:id' exact component={ProductDetails}/>
+            <Route path='/manage' exact component={ManageProducts}/>
+            <Route path='/cart' exact component={Cart}/>
+            <Route path='/history' exact component={HistoryTransaksi}/>
+            <Route path='*' component={PageNotFound} exact/>
+          </Switch>
+        </ScrollToTop>
       </div>
     );
   }

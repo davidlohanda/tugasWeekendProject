@@ -70,7 +70,7 @@ class CarouselKu extends Component {
           onExited={this.onExited}
           key={item.src}
         >
-          <img src={item.src} alt={item.altText} height='287px' width='820' />
+          <img src={item.src} alt={item.altText} height='257px' width='820' />
           {/* <CarouselCaption captionText={item.caption} captionHeader={item.caption} /> */}
         </CarouselItem>
       );

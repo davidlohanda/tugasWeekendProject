@@ -20,6 +20,8 @@ import swal from 'sweetalert'
 
 
 
+
+
 const urlApi='http://localhost:2000'
 
 const actionsStyles = theme => ({
@@ -140,7 +142,7 @@ class CustomPaginationActionsTable extends React.Component {
   plus=(id)=>{
     Axios.get('http://localhost:2000/cart/'+id)
     .then((res)=>{
-        var update={...res.data, quantity:res.data.quantity+1}
+        var update={...res.data, quantity:res.data.quantity+1, subtotal:(res.data.quantity+1)*((1-res.data.discount/100)*res.data.harga)}
         Axios.put('http://localhost:2000/cart/'+id, update)
         this.getDataCart()
     })
@@ -154,7 +156,7 @@ class CustomPaginationActionsTable extends React.Component {
             Axios.delete('http://localhost:2000/cart/'+id)
             this.getDataCart()    
         }
-        var update={...res.data, quantity:res.data.quantity-1}
+        var update={...res.data, quantity:res.data.quantity-1, subtotal:(res.data.quantity-1)*((1-res.data.discount/100)*res.data.harga)}
         Axios.put('http://localhost:2000/cart/'+id, update)
         this.getDataCart()
     })
@@ -206,28 +208,30 @@ class CustomPaginationActionsTable extends React.Component {
 
 
 btnCheckOut=()=>{
-  Axios.get(urlApi+'/cart?userId='+this.props.id)
+  Axios.get(urlApi+'/cart?userId='+this.props.userId)
   .then((res)=>{
     if (res.data.length>0){
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = today.getFullYear();
-      today = dd + '/' + mm + '/' + yyyy;
+      for(let i=0 ; i<res.data.length ; i++){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = dd + '/' + mm + '/' + yyyy;
       
-      var cart = this.state.rows
  
-          Axios.post(urlApi+"/history/",{...cart,tanggal:today})
+          Axios.post(urlApi+"/history/",{...res.data[0],tanggal:today})
           .then((res)=>{
             swal("Thank you","Please Come Again","success")
           })
           .catch((err)=>console.log(err))
 
-          Axios.delete(urlApi+"/cart/")
+          Axios.delete(urlApi+"/cart/"+res.data[i].id)
           .then((res)=>{console.log(res)
             this.getDataCart()
           })
           .catch((err)=>console.log(err))
+      
+      }
           
     }else{
       swal("Item Kosong","Blank","error")
@@ -291,9 +295,8 @@ btnCheckOut=()=>{
         </div>
       </Paper>
       <Paper className='mt-3'>
-          <h2>Order</h2>
           <h3>Total : Rp.{this.renderTotalPrice()} </h3>
-          <button onClick={this.btnCheckOut}>Checkout</button>
+          <button className="btn btn-success" onClick={this.btnCheckOut}>Checkout</button>
       </Paper>
       
       </div>
@@ -308,7 +311,8 @@ CustomPaginationActionsTable.propTypes = {
 
 const mapStateToProps = (state) => {
   return{
-    role : state.user.role
+    role : state.user.role,
+    userId: state.user.id
   }
 }
 
