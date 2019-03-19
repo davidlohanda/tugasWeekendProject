@@ -219,7 +219,7 @@ btnCheckOut=()=>{
         today = dd + '/' + mm + '/' + yyyy;
       
  
-          Axios.post(urlApi+"/history/",{...res.data[0],tanggal:today})
+          Axios.post(urlApi+"/history/",{...res.data[i],tanggal:today})
           .then((res)=>{
             swal("Thank you","Please Come Again","success")
           })
@@ -247,60 +247,69 @@ btnCheckOut=()=>{
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
    
-    
+  
     return (
-    <div className='container'>
-      <Paper className={classes.root}>
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table}>
-          <TableHead>
-              <TableRow>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}>#</TableCell>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}>IMG</TableCell>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NAMA</TableCell>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}>CAT</TableCell>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}>HARGA</TableCell>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DISC</TableCell>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}>QUANTITY</TableCell>
-                  <TableCell style={{fontSize:'24px', fontWeight:'600'}}></TableCell>
-              </TableRow>
-          </TableHead>
-            <TableBody>
-               {this.renderJsx()}
-
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
+      <div className='container'>
+        {
+          this.state.rows.length>0?
+          <div>
+              <Paper className={classes.root}>
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table}>
+            <TableHead>
+                <TableRow>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>#ID</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>IMG</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NAMA</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>CAT</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>HARGA</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DISC</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>QUANTITY</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}></TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </Paper>
-      <Paper className='mt-3'>
-          <h3>Total : Rp.{this.renderTotalPrice()} </h3>
-          <button className="btn btn-success" onClick={this.btnCheckOut}>Checkout</button>
-      </Paper>
+            </TableHead>
+              <TableBody>
+                {this.renderJsx()}
+
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 48 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    colSpan={3}
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      native: true,
+                    }}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActionsWrapped}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </div>
+        </Paper>
+        <Paper className='mt-3'>
+            <h3>Total : Rp.{this.renderTotalPrice()} </h3>
+            <button className="btn btn-success" onClick={this.btnCheckOut}>Checkout</button>
+        </Paper>
+          </div> 
+          
+          : <h2>Your Cart Is Currently Empty</h2>
+        }
+        
       
       </div>
-    );
+
+      );
   } 
   
 }

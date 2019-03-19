@@ -71,26 +71,32 @@ class HistoryTransaksi extends React.Component{
     render(){
         return(
             <div>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Tanggal</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Discount</th>
-                        <th scope="col">Subtotal</th>
-                        <th scope="col">Button</th>
-                    </tr>
-                </thead>
-                {this.renderHistory()}
-            </table>
-            
-            <h4>Total : Rp.{this.renderTotalPrice()}</h4>
-            <h4>Total Item : {this.state.history.length}</h4>
-
+                {this.state.history.length>0?
+                <div>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Harga</th>
+                            <th scope="col">Discount</th>
+                            <th scope="col">Subtotal</th>
+                            <th scope="col">Button</th>
+                        </tr>
+                    </thead>
+                    {this.renderHistory()}
+                </table>
+                
+                <h4>Total : Rp.{this.renderTotalPrice()}</h4>
+                <h4>Total Item : {this.state.history.length}</h4> 
+                </div>
+                : 
+                <h1>No History Yet</h1>
+                }
             </div>
+        
         )
     }
 }

@@ -43,9 +43,11 @@ class Home extends React.Component{
             <div className="col-lg-9">
                 <div className="my-4">
                     <Carousel/>
-                    <div style={{color:'blue', fontSize:'18px', fontWeight:'700'}}>
-                        Selamat berbelanja, <span style={{textTransform:'capitalize'}}>{this.props.username}</span>!
-                    </div>
+                   { this.props.username!==''?
+                        <div style={{color:'blue', fontSize:'18px', fontWeight:'700'}}>
+                                Selamat berbelanja, <span style={{textTransform:'capitalize'}}>{this.props.username}</span>!
+                        </div> : null
+                    }
                 </div>
             </div>
         </div>
