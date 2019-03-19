@@ -49,6 +49,8 @@ class ProductList extends React.Component{
       .catch((err)=>console.log(err))
     }
 
+   
+
     renderProductJsx=()=>{
         var jsx = this.state.listProduct.map((val) => {
             // if(val.nama.toLowerCase().startsWith(this.props.search.toLowerCase())){
@@ -74,7 +76,7 @@ class ProductList extends React.Component{
                         }
     
                         <p style={{display:'inline' , marginLeft:'10px',fontWeight:'500'}}>Rp. {val.harga - (val.harga*(val.discount/100))}</p>
-                        <input type='button' className='d-block btn btn-primary' value='Add To Cart' onClick={()=>this.btnAddtoCart(val.id)} />
+                        <input type='button' className='d-block btn btn-primary' value='Add To Cart' onClick={()=>this.btnAddtoCart(val.id)}  />
                         </div>
                     </div>
                 )    

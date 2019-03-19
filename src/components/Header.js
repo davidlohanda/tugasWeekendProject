@@ -35,7 +35,7 @@ class Header extends React.Component{
 
     
     renderCartLength=()=>{
-        axios.get('http://localhost:2000/cart')
+        axios.get('http://localhost:2000/cart?userId='+this.props.id)
         .then((res)=>{
             var cartLength=0
             res.data.map((val)=>{
@@ -67,7 +67,7 @@ class Header extends React.Component{
                             <NavLink>Hi , {this.props.username}</NavLink>
                         </NavItem>
                         <NavItem>
-                            <Link to="/cart"><NavLink className="btn btn-default border-primary" style={{fontSize:"14px"}}><i class="fas fa-shopping-cart"></i> Cart {this.state.cartLength} </NavLink></Link>
+                            <Link to="/cart"><NavLink className="btn btn-default border-primary" style={{fontSize:"14px"}}><i class="fas fa-shopping-cart"></i> Cart <span style={{color:'blue'}}>{this.state.cartLength}</span> </NavLink></Link>
                         </NavItem>
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>
@@ -140,6 +140,7 @@ const mapStateToProps=(state)=>{
     return{
         username:state.user.username,
         role:state.user.role,
+        id:state.user.id
     }
 }
 

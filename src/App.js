@@ -16,6 +16,7 @@ import Cart from './components/Cart'
 import PageNotFound from './components/PageNotFound'
 import ScrollToTop from './components/scrollToTop'
 import HistoryTransaksi from './components/HistoryTransaksi'
+import Detail from './components/Detail';
 
 
 const Cookie=new cookie()
@@ -43,6 +44,7 @@ class App extends Component {
             <Route path='/manage' exact component={ManageProducts}/>
             <Route path='/cart' exact component={Cart}/>
             <Route path='/history' exact component={HistoryTransaksi}/>
+            <Route path='/history-detail/:id' exact component={Detail}/>
             <Route path='*' component={PageNotFound} exact/>
           </Switch>
         </ScrollToTop>

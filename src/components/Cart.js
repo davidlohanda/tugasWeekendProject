@@ -17,8 +17,8 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import Axios from 'axios';
 import { connect } from 'react-redux'
 import swal from 'sweetalert'
-
-
+import {Link} from 'react-router-dom'
+import PageNotFound from './PageNotFound'
 
 
 
@@ -207,31 +207,63 @@ class CustomPaginationActionsTable extends React.Component {
 }
 
 
+// btnCheckOut=()=>{
+//   Axios.get(urlApi+'/cart?userId='+this.props.userId)
+//   .then((res)=>{
+//     if (res.data.length>0){
+//       for(let i=0 ; i<res.data.length ; i++){
+//         var today = new Date();
+//         var dd = String(today.getDate()).padStart(2, '0');
+//         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+//         var yyyy = today.getFullYear();
+//         today = dd + '/' + mm + '/' + yyyy;
+      
+ 
+//           Axios.post(urlApi+"/history/",{...res.data[i],tanggal:today})
+//           .then((res)=>{
+//             swal("Thank you","Please Come Again","success")
+//           })
+//           .catch((err)=>console.log(err))
+
+//           Axios.delete(urlApi+"/cart/"+res.data[i].id)
+//           .then((res)=>{console.log(res)
+//             this.getDataCart()
+//           })
+//           .catch((err)=>console.log(err))
+      
+//       }
+          
+//     }else{
+//       swal("Item Kosong","Blank","error")
+//     }
+//   })
+//   .catch((err)=>console.log(err))
+// }
+
+
 btnCheckOut=()=>{
   Axios.get(urlApi+'/cart?userId='+this.props.userId)
   .then((res)=>{
     if (res.data.length>0){
-      for(let i=0 ; i<res.data.length ; i++){
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         today = dd + '/' + mm + '/' + yyyy;
       
- 
-          Axios.post(urlApi+"/history/",{...res.data[i],tanggal:today})
+          Axios.post(urlApi+"/history/",{tanggal:today, item:[...res.data], itemVar:res.data.length , total:this.renderTotalPrice()})
           .then((res)=>{
             swal("Thank you","Please Come Again","success")
           })
           .catch((err)=>console.log(err))
-
-          Axios.delete(urlApi+"/cart/"+res.data[i].id)
-          .then((res)=>{console.log(res)
-            this.getDataCart()
-          })
-          .catch((err)=>console.log(err))
+          for(let i=0 ; i<res.data.length ; i++){
+            Axios.delete(urlApi+"/cart/"+res.data[i].id)
+            .then((res)=>{console.log(res)
+              this.getDataCart()
+            })
+            .catch((err)=>console.log(err))
       
-      }
+          }
           
     }else{
       swal("Item Kosong","Blank","error")
@@ -242,12 +274,17 @@ btnCheckOut=()=>{
 
 
 
+
+
+
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
    
-  
+    if(this.props.username===''){
+      return <PageNotFound/>
+  }
     return (
       <div className='container'>
         {
@@ -297,13 +334,19 @@ btnCheckOut=()=>{
             </Table>
           </div>
         </Paper>
-        <Paper className='mt-3'>
-            <h3>Total : Rp.{this.renderTotalPrice()} </h3>
-            <button className="btn btn-success" onClick={this.btnCheckOut}>Checkout</button>
+        <Paper className='mt-3' style={{textAlign:'center'}}>
+            <button className="btn btn-primary" style={{marginRight:'8px'}} onClick={this.btnCheckOut}>Checkout</button>
+            <Link to='/'><button className="btn btn-success">Continue Shopping</button></Link>
+            <h2>Total Belanjaan : Rp.{this.renderTotalPrice()} </h2>
         </Paper>
           </div> 
           
-          : <h2>Your Cart Is Currently Empty</h2>
+          : <div className="container">
+              <Paper className='py-3' style={{textAlign:'center'}}>
+                <Link to='/'><button className='btn btn-success'>Your Cart is Empty, Continue Shopping</button></Link>
+              </Paper>
+            </div> 
+          
         }
         
       
@@ -321,7 +364,8 @@ CustomPaginationActionsTable.propTypes = {
 const mapStateToProps = (state) => {
   return{
     role : state.user.role,
-    userId: state.user.id
+    userId: state.user.id,
+    username:state.user.username
   }
 }
 
